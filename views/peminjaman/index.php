@@ -38,6 +38,12 @@ require_once __DIR__ . '/../templates/sidebar.php';
                         <span class="badge bg-success ms-2"><?= count(array_filter($peminjaman, fn($p) => $p->status === 'dikembalikan')) ?></span>
                     </a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="tab-ditolak" href="#content-ditolak" data-bs-toggle="tab" role="tab" aria-controls="content-ditolak" aria-selected="false" style="cursor: pointer;">
+                        <i class="bi bi-x-circle me-1"></i>Ditolak
+                        <span class="badge bg-dark ms-2"><?= count(array_filter($peminjaman, fn($p) => $p->status === 'ditolak')) ?></span>
+                    </a>
+                </li>
             </ul>
 
             <div class="tab-content" style="padding-top: 1.5rem;">
@@ -75,7 +81,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                                 <a href="<?= App::BASE_URL ?>/index.php?page=peminjaman&action=approve&id=<?= $p->id ?>" class="btn btn-success btn-sm" title="Setujui" onclick="return confirm('Setujui peminjaman ini?')">
                                                     <i class="bi bi-check-lg"></i>
                                                 </a>
-                                                <a href="<?= App::BASE_URL ?>/index.php?page=peminjaman&action=delete&id=<?= $p->id ?>" class="btn btn-danger btn-sm" title="Tolak" onclick="return confirm('Tolak peminjaman ini?')">
+                                                <a href="<?= App::BASE_URL ?>/index.php?page=peminjaman&action=reject&id=<?= $p->id ?>" class="btn btn-danger btn-sm" title="Tolak" onclick="return confirm('Tolak peminjaman ini?')">
                                                     <i class="bi bi-x-lg"></i>
                                                 </a>
                                             </td>
@@ -149,9 +155,6 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                                     <a href="<?= App::BASE_URL ?>/index.php?page=pengembalian&action=create" onclick="setPeminjamanId(<?= $p->id ?>)" class="btn btn-info btn-sm" title="Kembalikan Buku">
                                                         <i class="bi bi-arrow-return-left"></i>
                                                     </a>
-                                                    <a href="<?= App::BASE_URL ?>/index.php?page=peminjaman&action=delete&id=<?= $p->id ?>" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin menghapus peminjaman ini?')">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -183,7 +186,6 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                         <th>Tgl Pinjam</th>
                                         <th>Tgl Dikembalikan</th>
                                         <th>Status</th>
-                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -197,11 +199,6 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                             <td>
                                                 <span class="badge bg-success">Dikembalikan</span>
                                             </td>
-                                            <td>
-                                                <a href="<?= App::BASE_URL ?>/index.php?page=peminjaman&action=delete&id=<?= $p->id ?>" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Yakin ingin menghapus peminjaman ini?')">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -211,6 +208,48 @@ require_once __DIR__ . '/../templates/sidebar.php';
                         <div class="empty-state">
                             <i class="bi bi-check-all d-block"></i>
                             <h5>Belum ada buku yang dikembalikan</h5>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Tab Ditolak -->
+                <div class="tab-pane fade" id="content-ditolak" role="tabpanel" aria-labelledby="tab-ditolak">
+                    <?php 
+                    $peminjamanDitolak = array_filter($peminjaman, fn($p) => $p->status === 'ditolak');
+                    ?>
+                    <?php if (!empty($peminjamanDitolak)): ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Peminjam</th>
+                                        <th>Buku</th>
+                                        <th>Tgl Pinjam</th>
+                                        <th>Tgl Kembali</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($peminjamanDitolak as $i => $p): ?>
+                                        <tr>
+                                            <td><?= count($peminjamanDitolak) - $i ?></td>
+                                            <td><strong><?= htmlspecialchars($p->nama_lengkap) ?></strong></td>
+                                            <td><?= htmlspecialchars($p->judul) ?></td>
+                                            <td><?= date('d/m/Y', strtotime($p->tanggal_pinjam)) ?></td>
+                                            <td><?= date('d/m/Y', strtotime($p->tanggal_kembali)) ?></td>
+                                            <td>
+                                                <span class="badge bg-danger">Ditolak</span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <i class="bi bi-emoji-smile d-block"></i>
+                            <h5>Tidak ada peminjaman yang ditolak</h5>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -243,6 +282,8 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                             <span class="badge bg-info">Disetujui (Ambil Buku)</span>
                                         <?php elseif ($p->status === 'dipinjam'): ?>
                                             <span class="badge bg-success">Sedang Dipinjam</span>
+                                        <?php elseif ($p->status === 'ditolak'): ?>
+                                            <span class="badge bg-danger">Ditolak</span>
                                         <?php else: ?>
                                             <span class="badge bg-secondary">Dikembalikan</span>
                                         <?php endif; ?>

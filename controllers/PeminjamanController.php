@@ -49,6 +49,8 @@ class PeminjamanController
 
             if (empty($data['buku_id']) || empty($data['tanggal_pinjam']) || empty($data['tanggal_kembali'])) {
                 $_SESSION['flash_error'] = 'Semua field harus diisi!';
+            } elseif (strtotime($data['tanggal_pinjam']) < strtotime(date('Y-m-d'))) {
+                $_SESSION['flash_error'] = 'Tanggal pinjam tidak boleh kurang dari hari ini!';
             } else {
                 // Cek stok buku
                 $bukuItem = $this->bukuModel->getById($data['buku_id']);
@@ -91,6 +93,8 @@ class PeminjamanController
 
             if (empty($data['user_id']) || empty($data['buku_id']) || empty($data['tanggal_pinjam']) || empty($data['tanggal_kembali'])) {
                 $error = 'Semua field harus diisi!';
+            } elseif (strtotime($data['tanggal_pinjam']) < strtotime(date('Y-m-d'))) {
+                $error = 'Tanggal pinjam tidak boleh kurang dari hari ini!';
             } else {
                 // Cek stok buku
                 $bukuItem = $this->bukuModel->getById($data['buku_id']);
@@ -188,10 +192,30 @@ class PeminjamanController
 
         $id = $_GET['id'] ?? null;
         if ($id) {
-            if ($this->peminjamanModel->updateStatus($id, 'disetujui')) {
+            if ($this->peminjamanModel->updateStatus($id, 'dipinjam')) {
                 $_SESSION['flash_success'] = 'Peminjaman berhasil disetujui!';
             } else {
                 $_SESSION['flash_error'] = 'Gagal menyetujui peminjaman!';
+            }
+        }
+        header('Location: ' . App::BASE_URL . '/index.php?page=peminjaman');
+        exit;
+    }
+
+    // Tolak peminjaman dari siswa
+    public function reject()
+    {
+        if ($_SESSION['role'] !== 'admin') {
+            header('Location: ' . App::BASE_URL . '/index.php?page=peminjaman');
+            exit;
+        }
+
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            if ($this->peminjamanModel->rejectPeminjaman($id)) {
+                $_SESSION['flash_success'] = 'Peminjaman berhasil ditolak!';
+            } else {
+                $_SESSION['flash_error'] = 'Gagal menolak peminjaman!';
             }
         }
         header('Location: ' . App::BASE_URL . '/index.php?page=peminjaman');

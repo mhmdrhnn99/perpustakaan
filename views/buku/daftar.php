@@ -8,16 +8,17 @@ require_once __DIR__ . '/../templates/sidebar.php';
 <!-- Search & Filter -->
 <div class="card mb-4">
     <div class="card-body">
-        <form method="GET" class="row g-3">
+        <form method="GET" class="d-flex">
             <input type="hidden" name="page" value="buku">
             <input type="hidden" name="action" value="daftar">
-            <div class="col-md-6">
+            <div class="input-group">
                 <input type="text" class="form-control" placeholder="Cari judul buku..." name="search" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
-            </div>
-            <div class="col-md-6">
-                <button type="submit" class="btn btn-primary w-100">
+                <button type="submit" class="btn btn-primary">
                     <i class="bi bi-search me-1"></i>Cari
                 </button>
+                <a href="<?= App::BASE_URL ?>/index.php?page=buku&action=daftar" class="btn btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                </a>
             </div>
         </form>
     </div>
@@ -86,11 +87,11 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                             </div>
                                             <div class="mb-3">
                                                 <label for="tanggal_pinjam<?= $b->id ?>" class="form-label">Tanggal Pinjam</label>
-                                                <input type="date" class="form-control" id="tanggal_pinjam<?= $b->id ?>" name="tanggal_pinjam" value="<?= date('Y-m-d') ?>" required>
+                                                <input type="date" class="form-control" id="tanggal_pinjam<?= $b->id ?>" name="tanggal_pinjam" value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-d') ?>" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="tanggal_kembali<?= $b->id ?>" class="form-label">Tanggal Target Kembali</label>
-                                                <input type="date" class="form-control" id="tanggal_kembali<?= $b->id ?>" name="tanggal_kembali" value="<?= date('Y-m-d', strtotime('+14 days')) ?>" required>
+                                                <input type="date" class="form-control" id="tanggal_kembali<?= $b->id ?>" name="tanggal_kembali" value="<?= date('Y-m-d', strtotime('+14 days')) ?>" min="<?= date('Y-m-d') ?>" required>
                                             </div>
                                             <div class="alert alert-info">
                                                 <small>Durasi peminjaman maksimal 14 hari. Keterlambatan akan dikenakan denda Rp 5.000 per hari.</small>
@@ -167,11 +168,11 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="tanggal_pinjam<?= $b->id ?>" class="form-label">Tanggal Pinjam</label>
-                                                        <input type="date" class="form-control" id="tanggal_pinjam<?= $b->id ?>" name="tanggal_pinjam" value="<?= date('Y-m-d') ?>" required>
+                                                        <input type="date" class="form-control" id="tanggal_pinjam<?= $b->id ?>" name="tanggal_pinjam" value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-d') ?>" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="tanggal_kembali<?= $b->id ?>" class="form-label">Tanggal Target Kembali</label>
-                                                        <input type="date" class="form-control" id="tanggal_kembali<?= $b->id ?>" name="tanggal_kembali" value="<?= date('Y-m-d', strtotime('+14 days')) ?>" required>
+                                                        <input type="date" class="form-control" id="tanggal_kembali<?= $b->id ?>" name="tanggal_kembali" value="<?= date('Y-m-d', strtotime('+14 days')) ?>" min="<?= date('Y-m-d') ?>" required>
                                                     </div>
                                                     <div class="alert alert-info">
                                                         <small>Durasi peminjaman maksimal 14 hari. Keterlambatan akan dikenakan denda Rp 5.000 per hari.</small>

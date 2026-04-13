@@ -465,19 +465,19 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="stat-item">
-                        <div class="stat-number">300+</div>
+                        <div class="stat-number">100+</div>
                         <div class="stat-label">Koleksi Buku</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="stat-item">
-                        <div class="stat-number">50+</div>
+                        <div class="stat-number">30+</div>
                         <div class="stat-label">Siswa Aktif</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="stat-item">
-                        <div class="stat-number">100+</div>
+                        <div class="stat-number">50+</div>
                         <div class="stat-label">Peminjaman/Bulan</div>
                     </div>
                 </div>

@@ -76,6 +76,8 @@ class BukuController
 
             if (empty($data['judul']) || empty($data['pengarang']) || empty($data['penerbit'])) {
                 $error = 'Judul, pengarang, dan penerbit harus diisi!';
+            } elseif ($data['jumlah_stok'] < 1) {
+                $error = 'Jumlah stok minimal adalah 1!';
             } else {
                 if ($this->bukuModel->create($data)) {
                     $_SESSION['flash_success'] = 'Buku berhasil ditambahkan!';
@@ -148,10 +150,15 @@ class BukuController
 
         $id = $_GET['id'] ?? null;
         if ($id) {
-            if ($this->bukuModel->delete($id)) {
-                $_SESSION['flash_success'] = 'Buku berhasil dihapus!';
+            // Cek apakah buku sedang dipinjam
+            if ($this->bukuModel->isBorrowed($id)) {
+                $_SESSION['flash_error'] = 'Buku tidak bisa dihapus karena sedang dipinjam!';
             } else {
-                $_SESSION['flash_error'] = 'Gagal menghapus buku!';
+                if ($this->bukuModel->delete($id)) {
+                    $_SESSION['flash_success'] = 'Buku berhasil dihapus!';
+                } else {
+                    $_SESSION['flash_error'] = 'Gagal menghapus buku!';
+                }
             }
         }
         header('Location: ' . App::BASE_URL . '/index.php?page=buku');

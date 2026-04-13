@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS peminjaman (
     buku_id INT NOT NULL,
     tanggal_pinjam DATE NOT NULL,
     tanggal_kembali DATE NOT NULL,
-    status ENUM('pengajuan', 'disetujui', 'dipinjam', 'dikembalikan') NOT NULL DEFAULT 'pengajuan',
+    status ENUM('pengajuan', 'disetujui', 'dipinjam', 'dikembalikan', 'ditolak') NOT NULL DEFAULT 'pengajuan',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (buku_id) REFERENCES buku(id) ON DELETE CASCADE

@@ -42,6 +42,12 @@ class Peminjaman
             'tanggal_kembali' => $data['tanggal_kembali']
         ]);
 
+        // Kurangi stok buku saat peminjaman dibuat
+        if ($result) {
+            $stmtStok = $this->db->prepare("UPDATE buku SET jumlah_stok = jumlah_stok - 1 WHERE id = :id AND jumlah_stok > 0");
+            $stmtStok->execute(['id' => $data['buku_id']]);
+        }
+
         return $result;
     }
 
@@ -60,24 +66,34 @@ class Peminjaman
 
     public function updateStatus($id, $status)
     {
-        // Get peminjaman data terlebih dahulu
-        $peminjaman = $this->getById($id);
-        
-        if ($peminjaman && $peminjaman->status === 'pengajuan' && $status === 'disetujui') {
-            // Kurangi stok buku saat disetujui
-            $stmtStok = $this->db->prepare("UPDATE buku SET jumlah_stok = jumlah_stok - 1 WHERE id = :id AND jumlah_stok > 0");
-            $stmtStok->execute(['id' => $peminjaman->buku_id]);
-        }
-        
+        // Stok sudah dikurangi saat create(), jadi tidak perlu kurangi lagi di sini
+        // Langsung update status saja
         $stmt = $this->db->prepare("UPDATE {$this->table} SET status = :status WHERE id = :id");
         return $stmt->execute(['id' => $id, 'status' => $status]);
     }
 
+    public function rejectPeminjaman($id)
+    {
+        // Get data peminjaman
+        $peminjaman = $this->getById($id);
+        if (!$peminjaman || $peminjaman->status !== 'pengajuan') {
+            return false;
+        }
+
+        // Kembalikan stok buku karena sudah dikurangi saat create()
+        $stmtStok = $this->db->prepare("UPDATE buku SET jumlah_stok = jumlah_stok + 1 WHERE id = :id");
+        $stmtStok->execute(['id' => $peminjaman->buku_id]);
+
+        // Update status jadi ditolak
+        $stmt = $this->db->prepare("UPDATE {$this->table} SET status = 'ditolak' WHERE id = :id");
+        return $stmt->execute(['id' => $id]);
+    }
+
     public function delete($id)
     {
-        // Kembalikan stok buku jika status disetujui atau dipinjam
+        // Kembalikan stok buku jika peminjaman belum dikembalikan
         $peminjaman = $this->getById($id);
-        if ($peminjaman && in_array($peminjaman->status, ['disetujui', 'dipinjam'])) {
+        if ($peminjaman && in_array($peminjaman->status, ['pengajuan', 'disetujui', 'dipinjam'])) {
             $stmtStok = $this->db->prepare("UPDATE buku SET jumlah_stok = jumlah_stok + 1 WHERE id = :id");
             $stmtStok->execute(['id' => $peminjaman->buku_id]);
         }

@@ -75,4 +75,14 @@ class Buku
         ]);
         return $stmt->fetchAll();
     }
+
+    /**
+     * Cek apakah buku sedang dipinjam (status: pengajuan, disetujui, atau dipinjam)
+     */
+    public function isBorrowed($id)
+    {
+        $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM peminjaman WHERE buku_id = :id AND status IN ('pengajuan', 'disetujui', 'dipinjam')");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch()->total > 0;
+    }
 }

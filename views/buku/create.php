@@ -52,8 +52,8 @@ require_once __DIR__ . '/../templates/sidebar.php';
                             <input type="text" class="form-control" id="isbn" name="isbn" value="<?= htmlspecialchars($_POST['isbn'] ?? '') ?>">
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="jumlah_stok" class="form-label">Jumlah Stok</label>
-                            <input type="number" class="form-control" id="jumlah_stok" name="jumlah_stok" value="<?= htmlspecialchars($_POST['jumlah_stok'] ?? '0') ?>" min="0">
+                            <label for="jumlah_stok" class="form-label">Jumlah Stok <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="jumlah_stok" name="jumlah_stok" value="<?= htmlspecialchars($_POST['jumlah_stok'] ?? '1') ?>" min="1" required>
                         </div>
                     </div>
                     <div class="d-flex gap-2">

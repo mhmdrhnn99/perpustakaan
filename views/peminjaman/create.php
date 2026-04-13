@@ -42,11 +42,11 @@ require_once __DIR__ . '/../templates/sidebar.php';
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="tanggal_pinjam" class="form-label">Tanggal Pinjam <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="tanggal_pinjam" name="tanggal_pinjam" value="<?= htmlspecialchars($_POST['tanggal_pinjam'] ?? date('Y-m-d')) ?>" required>
+                            <input type="date" class="form-control" id="tanggal_pinjam" name="tanggal_pinjam" value="<?= htmlspecialchars($_POST['tanggal_pinjam'] ?? date('Y-m-d')) ?>" min="<?= date('Y-m-d') ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="tanggal_kembali" class="form-label">Tanggal Kembali <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="tanggal_kembali" name="tanggal_kembali" value="<?= htmlspecialchars($_POST['tanggal_kembali'] ?? date('Y-m-d', strtotime('+7 days'))) ?>" required>
+                            <input type="date" class="form-control" id="tanggal_kembali" name="tanggal_kembali" value="<?= htmlspecialchars($_POST['tanggal_kembali'] ?? date('Y-m-d', strtotime('+7 days'))) ?>" min="<?= date('Y-m-d') ?>" required>
                         </div>
                     </div>
                     <div class="d-flex gap-2">

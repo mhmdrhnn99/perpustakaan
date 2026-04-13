@@ -8,15 +8,16 @@ require_once __DIR__ . '/../templates/sidebar.php';
 <!-- Search & Filter -->
 <div class="card mb-4">
     <div class="card-body">
-        <form method="GET" class="row g-3">
+        <form method="GET" class="d-flex">
             <input type="hidden" name="page" value="buku">
-            <div class="col-md-6">
+            <div class="input-group">
                 <input type="text" class="form-control" placeholder="Cari judul atau pengarang..." name="search" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
-            </div>
-            <div class="col-md-6">
-                <button type="submit" class="btn btn-primary w-100">
+                <button type="submit" class="btn btn-primary">
                     <i class="bi bi-search me-1"></i>Cari
                 </button>
+                <a href="<?= App::BASE_URL ?>/index.php?page=buku" class="btn btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                </a>
             </div>
         </form>
     </div>
