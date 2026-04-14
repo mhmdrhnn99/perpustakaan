@@ -76,6 +76,8 @@ class BukuController
 
             if (empty($data['judul']) || empty($data['pengarang']) || empty($data['penerbit'])) {
                 $error = 'Judul, pengarang, dan penerbit harus diisi!';
+            } elseif ($this->bukuModel->checkJudulExists($data['judul'])) {
+                $error = 'Judul buku sudah ada! Gunakan judul yang berbeda.';
             } elseif ($data['jumlah_stok'] < 1) {
                 $error = 'Jumlah stok minimal adalah 1!';
             } else {
@@ -127,6 +129,8 @@ class BukuController
 
             if (empty($data['judul']) || empty($data['pengarang']) || empty($data['penerbit'])) {
                 $error = 'Judul, pengarang, dan penerbit harus diisi!';
+            } elseif ($this->bukuModel->checkJudulExists($data['judul'], $id)) {
+                $error = 'Judul buku sudah ada! Gunakan judul yang berbeda.';
             } else {
                 if ($this->bukuModel->update($id, $data)) {
                     $_SESSION['flash_success'] = 'Buku berhasil diupdate!';

@@ -85,4 +85,19 @@ class Buku
         $stmt->execute(['id' => $id]);
         return $stmt->fetch()->total > 0;
     }
+
+    /**
+     * Cek apakah judul buku sudah ada
+     */
+    public function checkJudulExists($judul, $excludeId = null)
+    {
+        if ($excludeId) {
+            $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM {$this->table} WHERE LOWER(judul) = LOWER(:judul) AND id != :id");
+            $stmt->execute(['judul' => $judul, 'id' => $excludeId]);
+        } else {
+            $stmt = $this->db->prepare("SELECT COUNT(*) as total FROM {$this->table} WHERE LOWER(judul) = LOWER(:judul)");
+            $stmt->execute(['judul' => $judul]);
+        }
+        return $stmt->fetch()->total > 0;
+    }
 }

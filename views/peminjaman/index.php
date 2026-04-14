@@ -38,12 +38,6 @@ require_once __DIR__ . '/../templates/sidebar.php';
                         <span class="badge bg-success ms-2"><?= count(array_filter($peminjaman, fn($p) => $p->status === 'dikembalikan')) ?></span>
                     </a>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="tab-ditolak" href="#content-ditolak" data-bs-toggle="tab" role="tab" aria-controls="content-ditolak" aria-selected="false" style="cursor: pointer;">
-                        <i class="bi bi-x-circle me-1"></i>Ditolak
-                        <span class="badge bg-dark ms-2"><?= count(array_filter($peminjaman, fn($p) => $p->status === 'ditolak')) ?></span>
-                    </a>
-                </li>
             </ul>
 
             <div class="tab-content" style="padding-top: 1.5rem;">
@@ -61,6 +55,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                         <th>Peminjam</th>
                                         <th>Buku</th>
                                         <th>Tgl Pinjam</th>
+                                        <th>Waktu</th>
                                         <th>Tgl Kembali</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -73,6 +68,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                             <td><strong><?= htmlspecialchars($p->nama_lengkap) ?></strong></td>
                                             <td><?= htmlspecialchars($p->judul) ?></td>
                                             <td><?= date('d/m/Y', strtotime($p->tanggal_pinjam)) ?></td>
+                                            <td><?= date('H:i:s', strtotime($p->created_at)) ?></td>
                                             <td><?= date('d/m/Y', strtotime($p->tanggal_kembali)) ?></td>
                                             <td>
                                                 <span class="badge bg-warning text-dark">Pengajuan</span>
@@ -113,6 +109,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                         <th>Peminjam</th>
                                         <th>Buku</th>
                                         <th>Tgl Pinjam</th>
+                                        <th>Waktu</th>
                                         <th>Tgl Kembali</th>
                                         <th>Status</th>
                                         <th>Keterlambatan</th>
@@ -126,6 +123,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                             <td><strong><?= htmlspecialchars($p->nama_lengkap) ?></strong></td>
                                             <td><?= htmlspecialchars($p->judul) ?></td>
                                             <td><?= date('d/m/Y', strtotime($p->tanggal_pinjam)) ?></td>
+                                            <td><?= date('H:i:s', strtotime($p->created_at)) ?></td>
                                             <td><?= date('d/m/Y', strtotime($p->tanggal_kembali)) ?></td>
                                             <td>
                                                 <?php if ($p->status === 'disetujui'): ?>
@@ -184,6 +182,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                         <th>Peminjam</th>
                                         <th>Buku</th>
                                         <th>Tgl Pinjam</th>
+                                        <th>Waktu</th>
                                         <th>Tgl Dikembalikan</th>
                                         <th>Status</th>
                                     </tr>
@@ -195,6 +194,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                             <td><strong><?= htmlspecialchars($p->nama_lengkap) ?></strong></td>
                                             <td><?= htmlspecialchars($p->judul) ?></td>
                                             <td><?= date('d/m/Y', strtotime($p->tanggal_pinjam)) ?></td>
+                                            <td><?= date('H:i:s', strtotime($p->created_at)) ?></td>
                                             <td><?= date('d/m/Y', strtotime($p->tanggal_kembali)) ?></td>
                                             <td>
                                                 <span class="badge bg-success">Dikembalikan</span>
@@ -212,47 +212,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                     <?php endif; ?>
                 </div>
 
-                <!-- Tab Ditolak -->
-                <div class="tab-pane fade" id="content-ditolak" role="tabpanel" aria-labelledby="tab-ditolak">
-                    <?php 
-                    $peminjamanDitolak = array_filter($peminjaman, fn($p) => $p->status === 'ditolak');
-                    ?>
-                    <?php if (!empty($peminjamanDitolak)): ?>
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Peminjam</th>
-                                        <th>Buku</th>
-                                        <th>Tgl Pinjam</th>
-                                        <th>Tgl Kembali</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($peminjamanDitolak as $i => $p): ?>
-                                        <tr>
-                                            <td><?= count($peminjamanDitolak) - $i ?></td>
-                                            <td><strong><?= htmlspecialchars($p->nama_lengkap) ?></strong></td>
-                                            <td><?= htmlspecialchars($p->judul) ?></td>
-                                            <td><?= date('d/m/Y', strtotime($p->tanggal_pinjam)) ?></td>
-                                            <td><?= date('d/m/Y', strtotime($p->tanggal_kembali)) ?></td>
-                                            <td>
-                                                <span class="badge bg-danger">Ditolak</span>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php else: ?>
-                        <div class="empty-state">
-                            <i class="bi bi-emoji-smile d-block"></i>
-                            <h5>Tidak ada peminjaman yang ditolak</h5>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                <!-- Tab Siswa -->
             </div>
         <?php else: ?>
             <!-- Tampilan untuk Siswa -->
@@ -264,6 +224,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                 <th>No</th>
                                 <th>Buku</th>
                                 <th>Tgl Pinjam</th>
+                                <th>Waktu</th>
                                 <th>Tgl Kembali</th>
                                 <th>Status</th>
                             </tr>
@@ -274,6 +235,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                     <td><?= $i + 1 ?></td>
                                     <td><?= htmlspecialchars($p->judul) ?></td>
                                     <td><?= date('d/m/Y', strtotime($p->tanggal_pinjam)) ?></td>
+                                    <td><?= date('H:i:s', strtotime($p->created_at)) ?></td>
                                     <td><?= date('d/m/Y', strtotime($p->tanggal_kembali)) ?></td>
                                     <td>
                                         <?php if ($p->status === 'pengajuan'): ?>

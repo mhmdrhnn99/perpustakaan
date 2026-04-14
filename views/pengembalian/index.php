@@ -24,6 +24,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                             <th>Tgl Pinjam</th>
                             <th>Tgl Kembali</th>
                             <th>Tgl Dikembalikan</th>
+                            <th>Waktu</th>
                             <th>Keterlambatan</th>
                             <th>Denda</th>
                             <th>Aksi</th>
@@ -40,6 +41,7 @@ require_once __DIR__ . '/../templates/sidebar.php';
                                 <td><?= date('d/m/Y', strtotime($pg->tanggal_pinjam)) ?></td>
                                 <td><?= date('d/m/Y', strtotime($pg->tanggal_kembali)) ?></td>
                                 <td><?= date('d/m/Y', strtotime($pg->tanggal_pengembalian)) ?></td>
+                                <td><?= date('H:i:s', strtotime($pg->created_at)) ?></td>
                                 <td>
                                     <?php if ($hariTerlambat > 0): ?>
                                         <span class="badge bg-danger">
